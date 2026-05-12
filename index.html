@@ -932,14 +932,16 @@
                 const res = await fetch(WEBHOOK_URL, {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
-                    body: new URLSearchParams({
+                    body: JSON.stringify({
                         nome: data.nome,
+                        sobrenome: data.sobrenome,
                         email: data.email,
                         telefone: data.telefone,
+                        ddi: data.ddi,
                         segmento: data.segmento,
                         data_cadastro: data.data_cadastro,
                         origem: data.origem
-                    }).toString()
+                    })
                 });
 
                 if (res.ok) {
