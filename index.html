@@ -494,9 +494,12 @@
             border-color: rgba(217, 192, 160, .35);
         }
 
-        .ddi-flag {
-            font-size: 20px;
-            line-height: 1;
+        .ddi-flag-img {
+            width: 28px;
+            height: 20px;
+            border-radius: 2px;
+            object-fit: cover;
+            flex-shrink: 0;
         }
 
         .ddi-code {
@@ -515,30 +518,24 @@
             border: 1px solid rgba(255, 255, 255, .12);
             border-radius: 8px;
             z-index: 100;
-            box-shadow: 0 16px 40px rgba(0,0,0,0.5);
+            box-shadow: 0 16px 40px rgba(0, 0, 0, 0.5);
         }
 
         .ddi-dropdown-menu.open {
             display: block;
         }
 
-        .ddi-option {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            padding: 10px 14px;
-            cursor: pointer;
-            font-size: 14px;
-            color: #F4F0EA;
-            transition: background 0.15s;
+        .ddi-option .flag-img {
+            width: 24px;
+            height: 18px;
+            border-radius: 2px;
+            object-fit: cover;
+            flex-shrink: 0;
         }
 
-        .ddi-option:hover {
-            background: rgba(255,255,255,0.06);
-        }
-
-        .ddi-option .flag {
-            font-size: 18px;
+        .ddi-option .ddi-country-name {
+            color: #B8B2AA;
+            margin-left: auto;
         }
 
         .phone-input {
@@ -610,17 +607,21 @@
                             <div class="phone-input-wrapper">
                                 <div class="ddi-dropdown" id="ddiDropdown">
                                     <button type="button" class="ddi-dropdown-btn" id="ddiBtn">
-                                        <span class="ddi-flag" id="ddiFlag">🇧🇷</span>
+                                        <img class="ddi-flag-img" id="ddiFlagImg" src="https://flagcdn.com/w40/br.png"
+                                            alt="flag">
                                         <span class="ddi-code" id="ddiCode">+55</span>
-                                        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#6E6963" stroke-width="2"><path d="M6 9l6 6 6-6"/></svg>
+                                        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#6E6963"
+                                            stroke-width="2">
+                                            <path d="M6 9l6 6 6-6" />
+                                        </svg>
                                     </button>
                                     <div class="ddi-dropdown-menu" id="ddiMenu"></div>
                                     <select id="ddi" name="ddi" style="display:none">
-                                        <option value="55" selected>🇧🇷 +55</option>
+                                        <option value="55" selected>+55</option>
                                     </select>
                                 </div>
-                                <input type="tel" id="telefone" name="telefone" class="input phone-input" placeholder="(11) 99999-9999"
-                                    required>
+                                <input type="tel" id="telefone" name="telefone" class="input phone-input"
+                                    placeholder="(11) 99999-9999" required>
                             </div>
                         </div>
 
@@ -754,41 +755,41 @@
         const ddiMenu = document.getElementById('ddiMenu');
 
         const DDI_MAP = {
-            55: { flag: '🇧🇷', name: 'Brasil' },
-            1: { flag: '🇺🇸', name: 'EUA / Canadá' },
-            34: { flag: '🇪🇸', name: 'Espanha' },
-            52: { flag: '🇲🇽', name: 'México' },
-            54: { flag: '🇦🇷', name: 'Argentina' },
-            56: { flag: '🇨🇱', name: 'Chile' },
-            57: { flag: '🇨🇴', name: 'Colômbia' },
-            51: { flag: '🇵🇪', name: 'Peru' },
-            593: { flag: '🇪🇨', name: 'Equador' },
-            58: { flag: '🇻🇪', name: 'Venezuela' },
-            351: { flag: '🇵🇹', name: 'Portugal' },
-            44: { flag: '🇬🇧', name: 'Reino Unido' },
-            33: { flag: '🇫🇷', name: 'França' },
-            49: { flag: '🇩🇪', name: 'Alemanha' },
-            39: { flag: '🇮🇹', name: 'Itália' },
-            244: { flag: '🇦🇴', name: 'Angola' },
-            258: { flag: '🇲🇿', name: 'Moçambique' },
-            41: { flag: '🇨🇭', name: 'Suíça' },
+            55: { flag: 'br', name: 'Brasil' },
+            1: { flag: 'us', name: 'EUA / Canadá' },
+            34: { flag: 'es', name: 'Espanha' },
+            52: { flag: 'mx', name: 'México' },
+            54: { flag: 'ar', name: 'Argentina' },
+            56: { flag: 'cl', name: 'Chile' },
+            57: { flag: 'co', name: 'Colômbia' },
+            51: { flag: 'pe', name: 'Peru' },
+            593: { flag: 'ec', name: 'Equador' },
+            58: { flag: 've', name: 'Venezuela' },
+            351: { flag: 'pt', name: 'Portugal' },
+            44: { flag: 'gb', name: 'Reino Unido' },
+            33: { flag: 'fr', name: 'França' },
+            49: { flag: 'de', name: 'Alemanha' },
+            39: { flag: 'it', name: 'Itália' },
+            244: { flag: 'ao', name: 'Angola' },
+            258: { flag: 'mz', name: 'Moçambique' },
+            41: { flag: 'ch', name: 'Suíça' },
         };
 
-        // Monta menu DDI
+        // Monta menu DDI com imagens reais
         function buildDdiMenu(selectedDdi) {
-            const sorted = Object.entries(DDI_MAP).sort(([,a], [,b]) => a.name.localeCompare(b.name));
+            const sorted = Object.entries(DDI_MAP).sort(([, a], [, b]) => a.name.localeCompare(b.name));
             ddiMenu.innerHTML = sorted.map(([code, info]) =>
                 `<div class="ddi-option" data-ddi="${code}">
-                    <span class="flag">${info.flag}</span>
+                    <img class="flag-img" src="https://flagcdn.com/w40/${info.flag}.png" alt="${info.name}" width="24" height="18">
                     <span>+${code}</span>
-                    <span style="color:#B8B2AA;margin-left:auto">${info.name}</span>
+                    <span class="ddi-country-name">${info.name}</span>
                 </div>`
             ).join('');
             ddiMenu.querySelectorAll('.ddi-option').forEach(el => {
                 el.addEventListener('click', () => {
                     const ddi = parseInt(el.dataset.ddi);
                     ddiSelect.value = ddi;
-                    ddiFlag.textContent = DDI_MAP[ddi].flag;
+                    document.getElementById('ddiFlagImg').src = `https://flagcdn.com/w40/${DDI_MAP[ddi].flag}.png`;
                     ddiCode.textContent = '+' + ddi;
                     ddiMenu.classList.remove('open');
                     telefoneInput.value = '';
@@ -818,11 +819,23 @@
                 const ddi = data.country_calling_code ? parseInt(data.country_calling_code.replace(/\D/g, '')) : 55;
                 if (DDI_MAP[ddi]) {
                     ddiSelect.value = ddi;
-                    ddiFlag.textContent = DDI_MAP[ddi].flag;
+                    document.getElementById('ddiFlagImg').src = `https://flagcdn.com/w40/${DDI_MAP[ddi].flag}.png`;
                     ddiCode.textContent = '+' + ddi;
                 }
             })
-            .catch(() => {});
+            .catch(() => { });
+
+        // Captura UTM da URL
+        function getUtmParams() {
+            const params = new URLSearchParams(window.location.search);
+            return {
+                utm_source: params.get('utm_source') || '',
+                utm_medium: params.get('utm_medium') || '',
+                utm_campaign: params.get('utm_campaign') || '',
+                utm_content: params.get('utm_content') || '',
+                utm_term: params.get('utm_term') || ''
+            };
+        }
 
         function applyMask() {
             const ddi = parseInt(ddiSelect.value);
@@ -896,14 +909,15 @@
             const telefoneCompleto = ddi + telefoneRaw;
 
             const data = {
-                nome,
-                sobrenome,
+                nome: nome,
+                sobrenome: sobrenome,
                 email: document.getElementById('email').value.trim(),
                 telefone: telefoneCompleto,
                 ddi: ddi,
                 segmento: document.getElementById('segmento').value,
                 data_cadastro: new Date().toISOString(),
-                origem: window.location.href
+                origem: window.location.href,
+                ...getUtmParams()
             };
 
             // Validações
