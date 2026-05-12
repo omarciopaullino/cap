@@ -1,39 +1,48 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>ACESSO EXCLUSIVO | Academia Lendária</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;1,400&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link
+        href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;1,400&family=Inter:wght@300;400;500;600;700&display=swap"
+        rel="stylesheet">
     <style>
-        *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+        *,
+        *::before,
+        *::after {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
 
         :root {
-            --bg-main:    #07070A;
-            --bg-deep:    #030305;
-            --bg-card:    #101014;
-            --bg-input:   #111116;
+            --bg-main: #07070A;
+            --bg-deep: #030305;
+            --bg-card: #101014;
+            --bg-input: #111116;
 
-            --text-primary:   #F4F0EA;
+            --text-primary: #F4F0EA;
             --text-secondary: #B8B2AA;
-            --text-muted:     #6E6963;
+            --text-muted: #6E6963;
 
-            --accent-beige:       #D9C0A0;
+            --accent-beige: #D9C0A0;
             --accent-beige-light: #E7D3B6;
-            --accent-brown:       #9B7A58;
+            --accent-brown: #9B7A58;
 
             --border-soft: rgba(255, 255, 255, 0.08);
             --border-warm: rgba(217, 192, 160, 0.18);
 
             --shadow-soft: 0 20px 80px rgba(0, 0, 0, 0.45);
-            --shadow-cta:  0 0 40px rgba(217, 192, 160, 0.22);
+            --shadow-cta: 0 0 40px rgba(217, 192, 160, 0.22);
         }
 
         body {
             background:
-                radial-gradient(circle at top center, rgba(255,255,255,0.035), transparent 35%),
+                radial-gradient(circle at top center, rgba(255, 255, 255, 0.035), transparent 35%),
                 linear-gradient(#07070A, #030305);
             background-attachment: fixed;
             color: #F4F0EA;
@@ -48,11 +57,22 @@
 
         section {
             padding: 88px 0;
-            border-top: 1px solid rgba(255,255,255,.05);
+            border-top: 1px solid rgba(255, 255, 255, .05);
         }
 
-        h1, h2, h3 { color: #F4F0EA; letter-spacing: -0.05em; line-height: 0.95; }
-        p { color: #B8B2AA; font-size: 15px; line-height: 1.55; }
+        h1,
+        h2,
+        h3 {
+            color: #F4F0EA;
+            letter-spacing: -0.05em;
+            line-height: 0.95;
+        }
+
+        p {
+            color: #B8B2AA;
+            font-size: 15px;
+            line-height: 1.55;
+        }
 
         .italic-accent {
             font-family: "Cormorant Garamond", "Playfair Display", Georgia, serif;
@@ -62,7 +82,7 @@
 
         .badge {
             display: inline-block;
-            border: 1px solid rgba(217,192,160,.18);
+            border: 1px solid rgba(217, 192, 160, .18);
             color: #E7D3B6;
             border-radius: 999px;
             padding: 6px 12px;
@@ -73,7 +93,7 @@
 
         .card {
             background: #101014;
-            border: 1px solid rgba(255,255,255,.07);
+            border: 1px solid rgba(255, 255, 255, .07);
             border-radius: 10px;
             padding: 22px;
         }
@@ -82,7 +102,7 @@
             display: block;
             width: 100%;
             background: #111116;
-            border: 1px solid rgba(255,255,255,.08);
+            border: 1px solid rgba(255, 255, 255, .08);
             color: #F4F0EA;
             border-radius: 8px;
             height: 48px;
@@ -92,14 +112,20 @@
             transition: border-color 0.2s;
         }
 
-        .input::placeholder { color: #6E6963; }
-        .input:focus { outline: none; border-color: rgba(217,192,160,.35); }
+        .input::placeholder {
+            color: #6E6963;
+        }
+
+        .input:focus {
+            outline: none;
+            border-color: rgba(217, 192, 160, .35);
+        }
 
         .select {
             display: block;
             width: 100%;
             background: #111116;
-            border: 1px solid rgba(255,255,255,.08);
+            border: 1px solid rgba(255, 255, 255, .08);
             color: #F4F0EA;
             border-radius: 8px;
             height: 48px;
@@ -114,8 +140,15 @@
             transition: border-color 0.2s;
         }
 
-        .select:focus { outline: none; border-color: rgba(217,192,160,.35); }
-        .select option { background: #111116; color: #F4F0EA; }
+        .select:focus {
+            outline: none;
+            border-color: rgba(217, 192, 160, .35);
+        }
+
+        .select option {
+            background: #111116;
+            color: #F4F0EA;
+        }
 
         .btn-primary {
             display: block;
@@ -129,14 +162,27 @@
             font-size: 15px;
             letter-spacing: 0.02em;
             cursor: pointer;
-            box-shadow: 0 16px 60px rgba(217,192,160,.22);
+            box-shadow: 0 16px 60px rgba(217, 192, 160, .22);
             transition: opacity .2s, transform .2s;
             font-family: inherit;
         }
 
-        .btn-primary:hover { opacity: 0.88; transform: translateY(-1px); }
-        .btn-primary:disabled { opacity: 0.6; cursor: not-allowed; transform: none; }
-        .btn-primary.loading { position: relative; color: transparent; }
+        .btn-primary:hover {
+            opacity: 0.88;
+            transform: translateY(-1px);
+        }
+
+        .btn-primary:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .btn-primary.loading {
+            position: relative;
+            color: transparent;
+        }
+
         .btn-primary.loading::after {
             content: '';
             position: absolute;
@@ -145,13 +191,17 @@
             width: 20px;
             height: 20px;
             margin: -10px 0 0 -10px;
-            border: 2px solid rgba(22,17,12,0.3);
+            border: 2px solid rgba(22, 17, 12, 0.3);
             border-top-color: #16110C;
             border-radius: 50%;
             animation: spin 0.8s linear infinite;
         }
 
-        @keyframes spin { to { transform: rotate(360deg); } }
+        @keyframes spin {
+            to {
+                transform: rotate(360deg);
+            }
+        }
 
         .microcopy {
             font-size: 10px;
@@ -186,7 +236,9 @@
             border-top: none;
         }
 
-        .hero .badge { margin-bottom: 24px; }
+        .hero .badge {
+            margin-bottom: 24px;
+        }
 
         .hero h1 {
             font-size: clamp(44px, 7vw, 72px);
@@ -209,13 +261,18 @@
 
         .form-card {
             background: var(--bg-card);
-            border: 1px solid rgba(255,255,255,.07);
+            border: 1px solid rgba(255, 255, 255, .07);
             border-radius: 10px;
             padding: 36px 40px;
         }
 
-        .form-group { margin-bottom: 16px; }
-        .form-group:last-of-type { margin-bottom: 20px; }
+        .form-group {
+            margin-bottom: 16px;
+        }
+
+        .form-group:last-of-type {
+            margin-bottom: 20px;
+        }
 
         .form-group label {
             display: block;
@@ -237,7 +294,7 @@
 
         .learn-card {
             background: var(--bg-card);
-            border: 1px solid rgba(255,255,255,.07);
+            border: 1px solid rgba(255, 255, 255, .07);
             border-radius: 10px;
             padding: 22px;
         }
@@ -256,7 +313,9 @@
             line-height: 1.2;
         }
 
-        .learn-card p { font-size: 14px; }
+        .learn-card p {
+            font-size: 14px;
+        }
 
         /* Métricas */
         .metrics {
@@ -267,7 +326,9 @@
             flex-wrap: wrap;
         }
 
-        .metric { text-align: center; }
+        .metric {
+            text-align: center;
+        }
 
         .metric-number {
             font-size: 44px;
@@ -288,7 +349,7 @@
         /* Footer */
         .footer {
             padding: 48px 0;
-            border-top: 1px solid rgba(255,255,255,.05);
+            border-top: 1px solid rgba(255, 255, 255, .05);
         }
 
         .footer-content {
@@ -317,7 +378,9 @@
             transition: color 0.2s;
         }
 
-        .footer-links a:hover { color: var(--text-secondary); }
+        .footer-links a:hover {
+            color: var(--text-secondary);
+        }
 
         /* Toast */
         .toast {
@@ -326,7 +389,7 @@
             right: 24px;
             padding: 14px 20px;
             background: var(--bg-card);
-            border: 1px solid rgba(255,255,255,.1);
+            border: 1px solid rgba(255, 255, 255, .1);
             color: var(--text-primary);
             border-radius: 8px;
             font-size: 14px;
@@ -337,8 +400,14 @@
             z-index: 1000;
         }
 
-        .toast.show { transform: translateY(0); opacity: 1; }
-        .toast.error { border-color: rgba(220, 80, 80, 0.4); }
+        .toast.show {
+            transform: translateY(0);
+            opacity: 1;
+        }
+
+        .toast.error {
+            border-color: rgba(220, 80, 80, 0.4);
+        }
 
         /* Sucesso */
         .success-state {
@@ -347,7 +416,9 @@
             padding: 48px 24px;
         }
 
-        .success-state.show { display: block; }
+        .success-state.show {
+            display: block;
+        }
 
         .success-icon {
             width: 64px;
@@ -360,7 +431,11 @@
             margin: 0 auto 20px;
         }
 
-        .success-icon svg { width: 28px; height: 28px; stroke: #16110C; }
+        .success-icon svg {
+            width: 28px;
+            height: 28px;
+            stroke: #16110C;
+        }
 
         .success-state h3 {
             font-size: 24px;
@@ -368,7 +443,9 @@
             margin-bottom: 8px;
         }
 
-        .success-state p { font-size: 14px; }
+        .success-state p {
+            font-size: 14px;
+        }
 
         /* Erro */
         .error-msg {
@@ -382,14 +459,22 @@
             margin-bottom: 16px;
         }
 
-        .error-msg.show { display: block; }
+        .error-msg.show {
+            display: block;
+        }
 
         @media (max-width: 640px) {
-            .metrics { gap: 32px; }
-            .metric-number { font-size: 36px; }
+            .metrics {
+                gap: 32px;
+            }
+
+            .metric-number {
+                font-size: 36px;
+            }
         }
     </style>
 </head>
+
 <body>
     <header class="header">
         <div class="logo">Academia Lendária</div>
@@ -406,7 +491,8 @@
             </h1>
 
             <p>
-                Aprenda a construir sistemas inteligentes que trabalham por você — com clareza, estratégia e dados reais.
+                Aprenda a construir sistemas inteligentes que trabalham por você — com clareza, estratégia e dados
+                reais.
             </p>
 
             <div class="form-wrapper">
@@ -421,12 +507,14 @@
 
                         <div class="form-group">
                             <label for="email">E-mail principal</label>
-                            <input type="email" id="email" name="email" class="input" placeholder="seu@email.com" required>
+                            <input type="email" id="email" name="email" class="input" placeholder="seu@email.com"
+                                required>
                         </div>
 
                         <div class="form-group">
                             <label for="telefone">WhatsApp</label>
-                            <input type="tel" id="telefone" name="telefone" class="input" placeholder="(11) 99999-9999" required>
+                            <input type="tel" id="telefone" name="telefone" class="input" placeholder="(11) 99999-9999"
+                                required>
                         </div>
 
                         <div class="form-group">
@@ -455,7 +543,8 @@
 
                 <div class="success-state" id="successState">
                     <div class="success-icon">
-                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor">
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5"
+                            stroke="currentColor">
                             <path stroke-linecap="round" stroke-linejoin="round" d="M4.5 12.75l6 6 9-13.5" />
                         </svg>
                     </div>
@@ -553,13 +642,13 @@
         const telefoneInput = document.getElementById('telefone');
 
         // Máscara de telefone
-        telefoneInput.addEventListener('input', function(e) {
+        telefoneInput.addEventListener('input', function (e) {
             let v = e.target.value.replace(/\D/g, '');
             if (v.length > 11) v = v.slice(0, 11);
             if (v.length > 6) {
-                v = `(${v.slice(0,2)}) ${v.slice(2,7)}-${v.slice(7)}`;
+                v = `(${v.slice(0, 2)}) ${v.slice(2, 7)}-${v.slice(7)}`;
             } else if (v.length > 2) {
-                v = `(${v.slice(0,2)}) ${v.slice(2)}`;
+                v = `(${v.slice(0, 2)}) ${v.slice(2)}`;
             } else if (v.length > 0) {
                 v = `(${v}`;
             }
@@ -586,7 +675,7 @@
             return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
         }
 
-        form.addEventListener('submit', async function(e) {
+        form.addEventListener('submit', async function (e) {
             e.preventDefault();
             hideError();
 
@@ -624,17 +713,18 @@
             try {
                 const res = await fetch(WEBHOOK_URL, {
                     method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
+                    mode: 'no-cors',
+                    headers: {
+                        'Content-Type': 'text/plain'
+                    },
                     body: JSON.stringify(data)
                 });
 
-                if (res.ok) {
-                    formCard.style.display = 'none';
-                    successState.classList.add('show');
-                    showToast('Dados enviados com sucesso!');
-                } else {
-                    throw new Error(`HTTP ${res.status}`);
-                }
+                // Com no-cors, res.ok sempre retorna false mesmo com sucesso
+                // Mas o envio foi feito se não gerar exceção
+                formCard.style.display = 'none';
+                successState.classList.add('show');
+                showToast('Dados enviados com sucesso!');
             } catch (err) {
                 console.error('Webhook error:', err);
                 // Descomente para forçar sucesso em dev:
@@ -648,4 +738,5 @@
         });
     </script>
 </body>
+
 </html>
