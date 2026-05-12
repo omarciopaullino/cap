@@ -463,6 +463,21 @@
             display: block;
         }
 
+        .phone-input-wrapper {
+            display: flex;
+            gap: 8px;
+        }
+
+        .ddi-select {
+            width: 110px;
+            flex-shrink: 0;
+            font-size: 14px;
+        }
+
+        .phone-input {
+            flex: 1;
+        }
+
         @media (max-width: 640px) {
             .metrics {
                 gap: 32px;
@@ -470,6 +485,14 @@
 
             .metric-number {
                 font-size: 36px;
+            }
+
+            .phone-input-wrapper {
+                flex-direction: column;
+            }
+
+            .ddi-select {
+                width: 100%;
             }
         }
     </style>
@@ -513,8 +536,13 @@
 
                         <div class="form-group">
                             <label for="telefone">WhatsApp</label>
-                            <input type="tel" id="telefone" name="telefone" class="input" placeholder="(11) 99999-9999"
-                                required>
+                            <div class="phone-input-wrapper">
+                                <select id="ddi" name="ddi" class="select ddi-select" required>
+                                    <option value="55" data-flag="🇧🇷">🇧🇷 +55</option>
+                                </select>
+                                <input type="tel" id="telefone" name="telefone" class="input phone-input" placeholder="(11) 99999-9999"
+                                    required>
+                            </div>
                         </div>
 
                         <div class="form-group">
@@ -640,19 +668,91 @@
         const submitBtn = document.getElementById('submitBtn');
         const toast = document.getElementById('toast');
         const telefoneInput = document.getElementById('telefone');
+        const ddiSelect = document.getElementById('ddi');
 
-        // Máscara de telefone
-        telefoneInput.addEventListener('input', function (e) {
-            let v = e.target.value.replace(/\D/g, '');
-            if (v.length > 11) v = v.slice(0, 11);
-            if (v.length > 6) {
-                v = `(${v.slice(0, 2)}) ${v.slice(2, 7)}-${v.slice(7)}`;
-            } else if (v.length > 2) {
-                v = `(${v.slice(0, 2)}) ${v.slice(2)}`;
-            } else if (v.length > 0) {
-                v = `(${v}`;
+        const DDI_MAP = {
+            55: { flag: '🇧🇷', name: 'Brasil' },
+            1: { flag: '🇺🇸', name: 'EUA / Canadá' },
+            34: { flag: '🇪🇸', name: 'Espanha' },
+            52: { flag: '🇲🇽', name: 'México' },
+            54: { flag: '🇦🇷', name: 'Argentina' },
+            56: { flag: '🇨🇱', name: 'Chile' },
+            57: { flag: '🇨🇴', name: 'Colômbia' },
+            51: { flag: '🇵🇪', name: 'Peru' },
+            593: { flag: '🇪🇨', name: 'Equador' },
+            58: { flag: '🇻🇪', name: 'Venezuela' },
+            351: { flag: '🇵🇹', name: 'Portugal' },
+            44: { flag: '🇬🇧', name: 'Reino Unido' },
+            33: { flag: '🇫🇷', name: 'França' },
+            49: { flag: '🇩🇪', name: 'Alemanha' },
+            39: { flag: '🇮🇹', name: 'Itália' },
+            244: { flag: '🇦🇴', name: 'Angola' },
+            258: { flag: '🇲🇿', name: 'Moçambique' },
+            41: { flag: '🇨🇭', name: 'Suíça' },
+        };
+
+        // Carrega DDI do país via IP
+        fetch('https://ipapi.co/json/')
+            .then(r => r.json())
+            .then(data => {
+                const ddi = data.country_calling_code ? parseInt(data.country_calling_code.replace(/\D/g, '')) : 55;
+                if (DDI_MAP[ddi]) {
+                    populateDDI(ddi);
+                }
+            })
+            .catch(() => {});
+
+        // Monta options do DDI
+        function populateDDI(selectedDdi) {
+            const sorted = Object.entries(DDI_MAP).sort(([,a], [,b]) => a.name.localeCompare(b.name));
+            ddiSelect.innerHTML = sorted.map(([code, info]) =>
+                `<option value="${code}" ${parseInt(code) === selectedDdi ? 'selected' : ''}>${info.flag} +${code}</option>`
+            ).join('');
+        }
+        populateDDI(55);
+
+        // Máscara dinâmica por DDI
+        ddiSelect.addEventListener('change', () => {
+            telefoneInput.value = '';
+            applyMask();
+        });
+
+        function applyMask() {
+            const ddi = parseInt(ddiSelect.value);
+            const info = DDI_MAP[ddi];
+            if (!info) return;
+
+            const raw = telefoneInput.value.replace(/\D/g, '');
+            if (!raw) {
+                telefoneInput.value = '';
+                return;
             }
-            e.target.value = v;
+
+            let formatted = '';
+            if (ddi === 55) {
+                if (raw.length > 6) {
+                    formatted = `(${raw.slice(0, 2)}) ${raw.slice(2, 7)}-${raw.slice(7)}`;
+                } else if (raw.length > 2) {
+                    formatted = `(${raw.slice(0, 2)}) ${raw.slice(2)}`;
+                } else if (raw.length > 0) {
+                    formatted = `(${raw}`;
+                }
+            } else if (ddi === 1) {
+                if (raw.length > 6) {
+                    formatted = `(${raw.slice(0, 3)}) ${raw.slice(3, 6)}-${raw.slice(6)}`;
+                } else if (raw.length > 3) {
+                    formatted = `(${raw.slice(0, 3)}) ${raw.slice(3)}`;
+                } else if (raw.length > 0) {
+                    formatted = `(${raw}`;
+                }
+            } else {
+                formatted = raw;
+            }
+            telefoneInput.value = formatted;
+        }
+
+        telefoneInput.addEventListener('input', function (e) {
+            applyMask();
         });
 
         function showToast(msg, isError = false) {
@@ -679,17 +779,28 @@
             e.preventDefault();
             hideError();
 
+            const nomeCompleto = document.getElementById('nome').value.trim();
+            const partes = nomeCompleto.split(/\s+/);
+            const nome = partes[0] || '';
+            const sobrenome = partes.slice(1).join(' ') || '';
+
+            const ddi = document.getElementById('ddi').value;
+            const telefoneRaw = telefoneInput.value.replace(/\D/g, '');
+            const telefoneCompleto = ddi + telefoneRaw;
+
             const data = {
-                nome: document.getElementById('nome').value.trim(),
+                nome,
+                sobrenome,
                 email: document.getElementById('email').value.trim(),
-                telefone: document.getElementById('telefone').value.trim(),
+                telefone: telefoneCompleto,
+                ddi: ddi,
                 segmento: document.getElementById('segmento').value,
                 data_cadastro: new Date().toISOString(),
                 origem: window.location.href
             };
 
             // Validações
-            if (!data.nome || data.nome.length < 2) {
+            if (!nome || nome.length < 2) {
                 showError('Informe seu nome completo.');
                 return;
             }
@@ -697,7 +808,7 @@
                 showError('E-mail inválido.');
                 return;
             }
-            if (data.telefone.replace(/\D/g, '').length < 10) {
+            if (telefoneRaw.length < 8) {
                 showError('Informe um WhatsApp válido.');
                 return;
             }
