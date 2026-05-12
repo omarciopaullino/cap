@@ -713,18 +713,24 @@
             try {
                 const res = await fetch(WEBHOOK_URL, {
                     method: 'POST',
-                    mode: 'no-cors',
-                    headers: {
-                        'Content-Type': 'text/plain'
-                    },
-                    body: JSON.stringify(data)
+                    headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+                    body: new URLSearchParams({
+                        nome: data.nome,
+                        email: data.email,
+                        telefone: data.telefone,
+                        segmento: data.segmento,
+                        data_cadastro: data.data_cadastro,
+                        origem: data.origem
+                    }).toString()
                 });
 
-                // Com no-cors, res.ok sempre retorna false mesmo com sucesso
-                // Mas o envio foi feito se não gerar exceção
-                formCard.style.display = 'none';
-                successState.classList.add('show');
-                showToast('Dados enviados com sucesso!');
+                if (res.ok) {
+                    formCard.style.display = 'none';
+                    successState.classList.add('show');
+                    showToast('Dados enviados com sucesso!');
+                } else {
+                    throw new Error(`HTTP ${res.status}`);
+                }
             } catch (err) {
                 console.error('Webhook error:', err);
                 // Descomente para forçar sucesso em dev:
