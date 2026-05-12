@@ -468,10 +468,77 @@
             gap: 8px;
         }
 
-        .ddi-select {
-            width: 110px;
+        .ddi-dropdown {
+            position: relative;
             flex-shrink: 0;
+        }
+
+        .ddi-dropdown-btn {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            background: #111116;
+            border: 1px solid rgba(255, 255, 255, .08);
+            border-radius: 8px;
+            height: 48px;
+            padding: 0 12px;
+            cursor: pointer;
+            color: #F4F0EA;
             font-size: 14px;
+            font-family: inherit;
+            transition: border-color 0.2s;
+            white-space: nowrap;
+        }
+
+        .ddi-dropdown-btn:hover {
+            border-color: rgba(217, 192, 160, .35);
+        }
+
+        .ddi-flag {
+            font-size: 20px;
+            line-height: 1;
+        }
+
+        .ddi-code {
+            font-weight: 500;
+        }
+
+        .ddi-dropdown-menu {
+            display: none;
+            position: absolute;
+            top: calc(100% + 4px);
+            left: 0;
+            width: 200px;
+            max-height: 240px;
+            overflow-y: auto;
+            background: #111116;
+            border: 1px solid rgba(255, 255, 255, .12);
+            border-radius: 8px;
+            z-index: 100;
+            box-shadow: 0 16px 40px rgba(0,0,0,0.5);
+        }
+
+        .ddi-dropdown-menu.open {
+            display: block;
+        }
+
+        .ddi-option {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 10px 14px;
+            cursor: pointer;
+            font-size: 14px;
+            color: #F4F0EA;
+            transition: background 0.15s;
+        }
+
+        .ddi-option:hover {
+            background: rgba(255,255,255,0.06);
+        }
+
+        .ddi-option .flag {
+            font-size: 18px;
         }
 
         .phone-input {
@@ -491,7 +558,11 @@
                 flex-direction: column;
             }
 
-            .ddi-select {
+            .ddi-dropdown {
+                width: 100%;
+            }
+
+            .ddi-dropdown-btn {
                 width: 100%;
             }
         }
@@ -537,9 +608,17 @@
                         <div class="form-group">
                             <label for="telefone">WhatsApp</label>
                             <div class="phone-input-wrapper">
-                                <select id="ddi" name="ddi" class="select ddi-select" required>
-                                    <option value="55" data-flag="🇧🇷">🇧🇷 +55</option>
-                                </select>
+                                <div class="ddi-dropdown" id="ddiDropdown">
+                                    <button type="button" class="ddi-dropdown-btn" id="ddiBtn">
+                                        <span class="ddi-flag" id="ddiFlag">🇧🇷</span>
+                                        <span class="ddi-code" id="ddiCode">+55</span>
+                                        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#6E6963" stroke-width="2"><path d="M6 9l6 6 6-6"/></svg>
+                                    </button>
+                                    <div class="ddi-dropdown-menu" id="ddiMenu"></div>
+                                    <select id="ddi" name="ddi" style="display:none">
+                                        <option value="55" selected>🇧🇷 +55</option>
+                                    </select>
+                                </div>
                                 <input type="tel" id="telefone" name="telefone" class="input phone-input" placeholder="(11) 99999-9999"
                                     required>
                             </div>
@@ -669,6 +748,10 @@
         const toast = document.getElementById('toast');
         const telefoneInput = document.getElementById('telefone');
         const ddiSelect = document.getElementById('ddi');
+        const ddiBtn = document.getElementById('ddiBtn');
+        const ddiFlag = document.getElementById('ddiFlag');
+        const ddiCode = document.getElementById('ddiCode');
+        const ddiMenu = document.getElementById('ddiMenu');
 
         const DDI_MAP = {
             55: { flag: '🇧🇷', name: 'Brasil' },
@@ -691,31 +774,55 @@
             41: { flag: '🇨🇭', name: 'Suíça' },
         };
 
+        // Monta menu DDI
+        function buildDdiMenu(selectedDdi) {
+            const sorted = Object.entries(DDI_MAP).sort(([,a], [,b]) => a.name.localeCompare(b.name));
+            ddiMenu.innerHTML = sorted.map(([code, info]) =>
+                `<div class="ddi-option" data-ddi="${code}">
+                    <span class="flag">${info.flag}</span>
+                    <span>+${code}</span>
+                    <span style="color:#B8B2AA;margin-left:auto">${info.name}</span>
+                </div>`
+            ).join('');
+            ddiMenu.querySelectorAll('.ddi-option').forEach(el => {
+                el.addEventListener('click', () => {
+                    const ddi = parseInt(el.dataset.ddi);
+                    ddiSelect.value = ddi;
+                    ddiFlag.textContent = DDI_MAP[ddi].flag;
+                    ddiCode.textContent = '+' + ddi;
+                    ddiMenu.classList.remove('open');
+                    telefoneInput.value = '';
+                    applyMask();
+                });
+            });
+        }
+
+        buildDdiMenu(55);
+
+        // Toggle menu
+        ddiBtn.addEventListener('click', (e) => {
+            e.stopPropagation();
+            ddiMenu.classList.toggle('open');
+        });
+
+        document.addEventListener('click', (e) => {
+            if (!document.getElementById('ddiDropdown').contains(e.target)) {
+                ddiMenu.classList.remove('open');
+            }
+        });
+
         // Carrega DDI do país via IP
         fetch('https://ipapi.co/json/')
             .then(r => r.json())
             .then(data => {
                 const ddi = data.country_calling_code ? parseInt(data.country_calling_code.replace(/\D/g, '')) : 55;
                 if (DDI_MAP[ddi]) {
-                    populateDDI(ddi);
+                    ddiSelect.value = ddi;
+                    ddiFlag.textContent = DDI_MAP[ddi].flag;
+                    ddiCode.textContent = '+' + ddi;
                 }
             })
             .catch(() => {});
-
-        // Monta options do DDI
-        function populateDDI(selectedDdi) {
-            const sorted = Object.entries(DDI_MAP).sort(([,a], [,b]) => a.name.localeCompare(b.name));
-            ddiSelect.innerHTML = sorted.map(([code, info]) =>
-                `<option value="${code}" ${parseInt(code) === selectedDdi ? 'selected' : ''}>${info.flag} +${code}</option>`
-            ).join('');
-        }
-        populateDDI(55);
-
-        // Máscara dinâmica por DDI
-        ddiSelect.addEventListener('change', () => {
-            telefoneInput.value = '';
-            applyMask();
-        });
 
         function applyMask() {
             const ddi = parseInt(ddiSelect.value);
