@@ -543,6 +543,14 @@
         }
 
         @media (max-width: 640px) {
+            section {
+                padding: 56px 0;
+            }
+
+            .hero {
+                padding: 72px 0 56px;
+            }
+
             .metrics {
                 gap: 32px;
             }
@@ -553,6 +561,7 @@
 
             .phone-input-wrapper {
                 flex-direction: column;
+                gap: 0;
             }
 
             .ddi-dropdown {
@@ -561,6 +570,45 @@
 
             .ddi-dropdown-btn {
                 width: 100%;
+            }
+
+            .phone-input {
+                margin-top: 8px;
+            }
+
+            .form-card {
+                padding: 24px 20px;
+            }
+
+            .form-wrapper {
+                width: min(100% - 32px, 560px);
+            }
+
+            .hero h1 {
+                font-size: clamp(36px, 9vw, 48px);
+            }
+
+            .hero p {
+                font-size: 16px;
+            }
+
+            .learn-grid {
+                grid-template-columns: 1fr;
+                margin-top: 32px;
+            }
+
+            .metrics {
+                margin-top: 32px;
+            }
+
+            .footer-content {
+                padding: 0 16px;
+            }
+
+            .ddi-dropdown-menu {
+                width: 100%;
+                left: 0;
+                right: 0;
             }
         }
     </style>
