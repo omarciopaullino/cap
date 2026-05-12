@@ -1,0 +1,651 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ACESSO EXCLUSIVO | Academia Lendária</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;1,400&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+        :root {
+            --bg-main:    #07070A;
+            --bg-deep:    #030305;
+            --bg-card:    #101014;
+            --bg-input:   #111116;
+
+            --text-primary:   #F4F0EA;
+            --text-secondary: #B8B2AA;
+            --text-muted:     #6E6963;
+
+            --accent-beige:       #D9C0A0;
+            --accent-beige-light: #E7D3B6;
+            --accent-brown:       #9B7A58;
+
+            --border-soft: rgba(255, 255, 255, 0.08);
+            --border-warm: rgba(217, 192, 160, 0.18);
+
+            --shadow-soft: 0 20px 80px rgba(0, 0, 0, 0.45);
+            --shadow-cta:  0 0 40px rgba(217, 192, 160, 0.22);
+        }
+
+        body {
+            background:
+                radial-gradient(circle at top center, rgba(255,255,255,0.035), transparent 35%),
+                linear-gradient(#07070A, #030305);
+            background-attachment: fixed;
+            color: #F4F0EA;
+            font-family: "Inter", system-ui, sans-serif;
+            min-height: 100vh;
+        }
+
+        .container {
+            width: min(100% - 64px, 1200px);
+            margin: 0 auto;
+        }
+
+        section {
+            padding: 88px 0;
+            border-top: 1px solid rgba(255,255,255,.05);
+        }
+
+        h1, h2, h3 { color: #F4F0EA; letter-spacing: -0.05em; line-height: 0.95; }
+        p { color: #B8B2AA; font-size: 15px; line-height: 1.55; }
+
+        .italic-accent {
+            font-family: "Cormorant Garamond", "Playfair Display", Georgia, serif;
+            font-style: italic;
+            font-weight: 400;
+        }
+
+        .badge {
+            display: inline-block;
+            border: 1px solid rgba(217,192,160,.18);
+            color: #E7D3B6;
+            border-radius: 999px;
+            padding: 6px 12px;
+            font-size: 10px;
+            letter-spacing: .16em;
+            text-transform: uppercase;
+        }
+
+        .card {
+            background: #101014;
+            border: 1px solid rgba(255,255,255,.07);
+            border-radius: 10px;
+            padding: 22px;
+        }
+
+        .input {
+            display: block;
+            width: 100%;
+            background: #111116;
+            border: 1px solid rgba(255,255,255,.08);
+            color: #F4F0EA;
+            border-radius: 8px;
+            height: 48px;
+            padding: 0 16px;
+            font-size: 15px;
+            font-family: inherit;
+            transition: border-color 0.2s;
+        }
+
+        .input::placeholder { color: #6E6963; }
+        .input:focus { outline: none; border-color: rgba(217,192,160,.35); }
+
+        .select {
+            display: block;
+            width: 100%;
+            background: #111116;
+            border: 1px solid rgba(255,255,255,.08);
+            color: #F4F0EA;
+            border-radius: 8px;
+            height: 48px;
+            padding: 0 40px 0 16px;
+            font-size: 15px;
+            font-family: inherit;
+            cursor: pointer;
+            appearance: none;
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='14' height='14' viewBox='0 0 24 24' fill='none' stroke='%236E6963' stroke-width='2'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E");
+            background-repeat: no-repeat;
+            background-position: right 16px center;
+            transition: border-color 0.2s;
+        }
+
+        .select:focus { outline: none; border-color: rgba(217,192,160,.35); }
+        .select option { background: #111116; color: #F4F0EA; }
+
+        .btn-primary {
+            display: block;
+            width: 100%;
+            background: linear-gradient(180deg, #E7D3B6, #C8AA84);
+            color: #16110C;
+            border: none;
+            border-radius: 999px;
+            height: 52px;
+            font-weight: 600;
+            font-size: 15px;
+            letter-spacing: 0.02em;
+            cursor: pointer;
+            box-shadow: 0 16px 60px rgba(217,192,160,.22);
+            transition: opacity .2s, transform .2s;
+            font-family: inherit;
+        }
+
+        .btn-primary:hover { opacity: 0.88; transform: translateY(-1px); }
+        .btn-primary:disabled { opacity: 0.6; cursor: not-allowed; transform: none; }
+        .btn-primary.loading { position: relative; color: transparent; }
+        .btn-primary.loading::after {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 20px;
+            height: 20px;
+            margin: -10px 0 0 -10px;
+            border: 2px solid rgba(22,17,12,0.3);
+            border-top-color: #16110C;
+            border-radius: 50%;
+            animation: spin 0.8s linear infinite;
+        }
+
+        @keyframes spin { to { transform: rotate(360deg); } }
+
+        .microcopy {
+            font-size: 10px;
+            letter-spacing: .16em;
+            text-transform: uppercase;
+            color: #6E6963;
+            text-align: center;
+        }
+
+        /* Header */
+        .header {
+            height: 48px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 24px;
+        }
+
+        .logo {
+            font-size: 14px;
+            font-weight: 600;
+            letter-spacing: 0.12em;
+            text-transform: uppercase;
+            color: var(--text-primary);
+        }
+
+        /* Hero */
+        .hero {
+            text-align: center;
+            padding: 120px 0 88px;
+            border-top: none;
+        }
+
+        .hero .badge { margin-bottom: 24px; }
+
+        .hero h1 {
+            font-size: clamp(44px, 7vw, 72px);
+            font-weight: 600;
+            line-height: 0.9;
+            margin-bottom: 24px;
+        }
+
+        .hero p {
+            font-size: 18px;
+            max-width: 600px;
+            margin: 0 auto 48px;
+        }
+
+        /* Formulário */
+        .form-wrapper {
+            max-width: 560px;
+            margin: 0 auto;
+        }
+
+        .form-card {
+            background: var(--bg-card);
+            border: 1px solid rgba(255,255,255,.07);
+            border-radius: 10px;
+            padding: 36px 40px;
+        }
+
+        .form-group { margin-bottom: 16px; }
+        .form-group:last-of-type { margin-bottom: 20px; }
+
+        .form-group label {
+            display: block;
+            font-size: 11px;
+            letter-spacing: .1em;
+            text-transform: uppercase;
+            color: var(--text-secondary);
+            margin-bottom: 8px;
+            text-align: left;
+        }
+
+        /* O que você vai aprender */
+        .learn-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+            gap: 16px;
+            margin-top: 48px;
+        }
+
+        .learn-card {
+            background: var(--bg-card);
+            border: 1px solid rgba(255,255,255,.07);
+            border-radius: 10px;
+            padding: 22px;
+        }
+
+        .learn-number {
+            font-size: 11px;
+            letter-spacing: .12em;
+            color: var(--accent-beige);
+            margin-bottom: 10px;
+        }
+
+        .learn-card h3 {
+            font-size: 16px;
+            font-weight: 600;
+            margin-bottom: 8px;
+            line-height: 1.2;
+        }
+
+        .learn-card p { font-size: 14px; }
+
+        /* Métricas */
+        .metrics {
+            display: flex;
+            justify-content: center;
+            gap: 64px;
+            margin-top: 48px;
+            flex-wrap: wrap;
+        }
+
+        .metric { text-align: center; }
+
+        .metric-number {
+            font-size: 44px;
+            font-weight: 600;
+            color: var(--text-primary);
+            letter-spacing: -0.04em;
+            line-height: 1;
+        }
+
+        .metric-label {
+            font-size: 10px;
+            letter-spacing: 0.18em;
+            text-transform: uppercase;
+            color: #8B8178;
+            margin-top: 6px;
+        }
+
+        /* Footer */
+        .footer {
+            padding: 48px 0;
+            border-top: 1px solid rgba(255,255,255,.05);
+        }
+
+        .footer-content {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 16px;
+            text-align: center;
+        }
+
+        .footer p {
+            font-size: 13px;
+        }
+
+        .footer-links {
+            display: flex;
+            gap: 24px;
+            margin-top: 8px;
+        }
+
+        .footer-links a {
+            color: var(--text-muted);
+            text-decoration: none;
+            font-size: 12px;
+            letter-spacing: .05em;
+            transition: color 0.2s;
+        }
+
+        .footer-links a:hover { color: var(--text-secondary); }
+
+        /* Toast */
+        .toast {
+            position: fixed;
+            bottom: 24px;
+            right: 24px;
+            padding: 14px 20px;
+            background: var(--bg-card);
+            border: 1px solid rgba(255,255,255,.1);
+            color: var(--text-primary);
+            border-radius: 8px;
+            font-size: 14px;
+            box-shadow: var(--shadow-soft);
+            transform: translateY(100px);
+            opacity: 0;
+            transition: all 0.3s;
+            z-index: 1000;
+        }
+
+        .toast.show { transform: translateY(0); opacity: 1; }
+        .toast.error { border-color: rgba(220, 80, 80, 0.4); }
+
+        /* Sucesso */
+        .success-state {
+            display: none;
+            text-align: center;
+            padding: 48px 24px;
+        }
+
+        .success-state.show { display: block; }
+
+        .success-icon {
+            width: 64px;
+            height: 64px;
+            background: linear-gradient(180deg, #E7D3B6, #C8AA84);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 20px;
+        }
+
+        .success-icon svg { width: 28px; height: 28px; stroke: #16110C; }
+
+        .success-state h3 {
+            font-size: 24px;
+            font-weight: 600;
+            margin-bottom: 8px;
+        }
+
+        .success-state p { font-size: 14px; }
+
+        /* Erro */
+        .error-msg {
+            display: none;
+            background: rgba(220, 80, 80, 0.1);
+            border: 1px solid rgba(220, 80, 80, 0.25);
+            color: #e05a5a;
+            padding: 10px 14px;
+            border-radius: 6px;
+            font-size: 13px;
+            margin-bottom: 16px;
+        }
+
+        .error-msg.show { display: block; }
+
+        @media (max-width: 640px) {
+            .metrics { gap: 32px; }
+            .metric-number { font-size: 36px; }
+        }
+    </style>
+</head>
+<body>
+    <header class="header">
+        <div class="logo">Academia Lendária</div>
+        <span class="badge">Acesso Exclusivo</span>
+    </header>
+
+    <section class="hero">
+        <div class="container">
+            <span class="badge">Transformação • IA • Sistemas</span>
+
+            <h1>
+                Pare de <em class="italic-accent">improvisar</em>.<br>
+                Comece a <em class="italic-accent">escalar</em>.
+            </h1>
+
+            <p>
+                Aprenda a construir sistemas inteligentes que trabalham por você — com clareza, estratégia e dados reais.
+            </p>
+
+            <div class="form-wrapper">
+                <div class="form-card" id="formCard">
+                    <form id="captureForm">
+                        <div class="error-msg" id="errorMsg"></div>
+
+                        <div class="form-group">
+                            <label for="nome">Nome completo</label>
+                            <input type="text" id="nome" name="nome" class="input" placeholder="Seu nome" required>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="email">E-mail principal</label>
+                            <input type="email" id="email" name="email" class="input" placeholder="seu@email.com" required>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="telefone">WhatsApp</label>
+                            <input type="tel" id="telefone" name="telefone" class="input" placeholder="(11) 99999-9999" required>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="segmento">Área de atuação</label>
+                            <select id="segmento" name="segmento" class="select" required>
+                                <option value="">Selecione</option>
+                                <option value="tecnologia">Tecnologia</option>
+                                <option value="marketing">Marketing</option>
+                                <option value="vendas">Vendas</option>
+                                <option value="financas">Finanças</option>
+                                <option value="produtos">Produtos / E-commerce</option>
+                                <option value="servicos">Prestação de Serviços</option>
+                                <option value="outro">Outro</option>
+                            </select>
+                        </div>
+
+                        <button type="submit" class="btn-primary" id="submitBtn">
+                            QUERO MEU ACESSO
+                        </button>
+                    </form>
+
+                    <p class="microcopy" style="margin-top: 16px;">
+                        Vagas limitadas · Sem spam · Desinscreve quando quiser
+                    </p>
+                </div>
+
+                <div class="success-state" id="successState">
+                    <div class="success-icon">
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M4.5 12.75l6 6 9-13.5" />
+                        </svg>
+                    </div>
+                    <h3>Acesso <em class="italic-accent">confirmado</em></h3>
+                    <p>Verifique seu e-mail nos próximos minutos.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section>
+        <div class="container">
+            <h2>O que você vai <em class="italic-accent">aprender</em></h2>
+
+            <div class="learn-grid">
+                <div class="learn-card">
+                    <div class="learn-number">01</div>
+                    <h3>Sistemas com IA</h3>
+                    <p>Construa fluxos automatizados que работают 24/7 sem sua supervisão constante.</p>
+                </div>
+
+                <div class="learn-card">
+                    <div class="learn-number">02</div>
+                    <h3>Decisões com Dados</h3>
+                    <p>Pare de chutar. Aprenda a extrair insights que realmente importam.</p>
+                </div>
+
+                <div class="learn-card">
+                    <div class="learn-number">03</div>
+                    <h3>Escala Real</h3>
+                    <p>Estratégias testadas para crescer sem perder controle ou sanidade.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section>
+        <div class="container" style="text-align: center;">
+            <h2>Dados <em class="italic-accent">reais</em></h2>
+            <p style="max-width: 400px; margin: 16px auto 0;">
+                Resultados de quem já implementou os sistemas na prática.
+            </p>
+
+            <div class="metrics">
+                <div class="metric">
+                    <div class="metric-number">2.4K+</div>
+                    <div class="metric-label">Alunos transformados</div>
+                </div>
+                <div class="metric">
+                    <div class="metric-number">94%</div>
+                    <div class="metric-label">Taxa de satisfação</div>
+                </div>
+                <div class="metric">
+                    <div class="metric-number">3x</div>
+                    <div class="metric-label">Média de crescimento</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="logo">Academia Lendária</div>
+                <p>O ecosistema de educação para quem quer resultados, não apenas conteúdo.</p>
+
+                <div class="footer-links">
+                    <a href="#">Termos de uso</a>
+                    <a href="#">Privacidade</a>
+                    <a href="#">Contato</a>
+                </div>
+
+                <p class="microcopy" style="margin-top: 16px;">
+                    © 2024 Academia Lendária. Todos os direitos reservados.
+                </p>
+            </div>
+        </div>
+    </footer>
+
+    <div class="toast" id="toast"></div>
+
+    <script>
+        // =============================================
+        // CONFIGURAÇÃO DO WEBHOOK
+        // =============================================
+        const WEBHOOK_URL = 'https://ai.pleymus.com/webhook-test/fd1dda1e-fac8-4a37-981b-4ca18a3d7a0b';
+        // =============================================
+
+        const form = document.getElementById('captureForm');
+        const formCard = document.getElementById('formCard');
+        const successState = document.getElementById('successState');
+        const errorMsg = document.getElementById('errorMsg');
+        const submitBtn = document.getElementById('submitBtn');
+        const toast = document.getElementById('toast');
+        const telefoneInput = document.getElementById('telefone');
+
+        // Máscara de telefone
+        telefoneInput.addEventListener('input', function(e) {
+            let v = e.target.value.replace(/\D/g, '');
+            if (v.length > 11) v = v.slice(0, 11);
+            if (v.length > 6) {
+                v = `(${v.slice(0,2)}) ${v.slice(2,7)}-${v.slice(7)}`;
+            } else if (v.length > 2) {
+                v = `(${v.slice(0,2)}) ${v.slice(2)}`;
+            } else if (v.length > 0) {
+                v = `(${v}`;
+            }
+            e.target.value = v;
+        });
+
+        function showToast(msg, isError = false) {
+            toast.textContent = msg;
+            toast.classList.toggle('error', isError);
+            toast.classList.add('show');
+            setTimeout(() => toast.classList.remove('show'), 4000);
+        }
+
+        function showError(msg) {
+            errorMsg.textContent = msg;
+            errorMsg.classList.add('show');
+        }
+
+        function hideError() {
+            errorMsg.classList.remove('show');
+        }
+
+        function isValidEmail(email) {
+            return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+        }
+
+        form.addEventListener('submit', async function(e) {
+            e.preventDefault();
+            hideError();
+
+            const data = {
+                nome: document.getElementById('nome').value.trim(),
+                email: document.getElementById('email').value.trim(),
+                telefone: document.getElementById('telefone').value.trim(),
+                segmento: document.getElementById('segmento').value,
+                data_cadastro: new Date().toISOString(),
+                origem: window.location.href
+            };
+
+            // Validações
+            if (!data.nome || data.nome.length < 2) {
+                showError('Informe seu nome completo.');
+                return;
+            }
+            if (!isValidEmail(data.email)) {
+                showError('E-mail inválido.');
+                return;
+            }
+            if (data.telefone.replace(/\D/g, '').length < 10) {
+                showError('Informe um WhatsApp válido.');
+                return;
+            }
+            if (!data.segmento) {
+                showError('Selecione sua área de atuação.');
+                return;
+            }
+
+            // Loading
+            submitBtn.classList.add('loading');
+            submitBtn.disabled = true;
+
+            try {
+                const res = await fetch(WEBHOOK_URL, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(data)
+                });
+
+                if (res.ok) {
+                    formCard.style.display = 'none';
+                    successState.classList.add('show');
+                    showToast('Dados enviados com sucesso!');
+                } else {
+                    throw new Error(`HTTP ${res.status}`);
+                }
+            } catch (err) {
+                console.error('Webhook error:', err);
+                // Descomente para forçar sucesso em dev:
+                // formCard.style.display = 'none';
+                // successState.classList.add('show');
+                showError('Erro ao enviar. Tente novamente.');
+            } finally {
+                submitBtn.classList.remove('loading');
+                submitBtn.disabled = false;
+            }
+        });
+    </script>
+</body>
+</html>
